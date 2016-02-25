@@ -1,2 +1,2 @@
 # goquery
-use go to executive osqueri to get the data
+use go to executive osqueryi to get the data
