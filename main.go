@@ -40,7 +40,7 @@ func main(){
 
    results := queryJason(jsondata.Sql)
 
-
+    //print with string way, Json way will get "/"
    c.String(http.StatusOK, string(results))
    //c.JSON(http.StatusOK,gin.H{"message": string(a)})
  })
