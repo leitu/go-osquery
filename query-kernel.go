@@ -23,7 +23,11 @@ func main() {
 	//http://blog.golang.org/json-and-go
 	for i := range obj {
 		m := obj[i].(map[string]interface{})
-		fmt.Println(m["version"])
+		//Print the content
+		//fmt.Println(m["version"])
+		//Print the json
+		a, _ := json.Marshal(m)
+		fmt.Println(string(a))
 	}
 
 }
