@@ -41,5 +41,5 @@ You also can use command way to get the data directly
 ```
 
 ##ToDo
-move SQL section to default value.
-move query-kernel.go to cli way
+* move SQL section to default value.
+* move query-kernel.go to cli way

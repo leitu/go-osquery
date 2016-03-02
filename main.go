@@ -6,6 +6,7 @@ import (
   "os/exec"
   "github.com/gin-gonic/gin"
   "net/http"
+  //"regexp"
   //"bytes"
   //"time"
 )
@@ -16,7 +17,7 @@ type JsonData struct {
 
 }
 
-func queryJason(sql string)[]byte{
+func queryJason(sql string)string{
 
   bs, err := exec.Command("osqueryi", sql, "--json").Output()
 
@@ -24,25 +25,41 @@ func queryJason(sql string)[]byte{
     panic(err)
   }
 
-  return bs
+  return string(bs)
 }
 
 func main(){
   router := gin.Default()
+  router.LoadHTMLGlob("templates/*")
 
   router.GET("/", func(c *gin.Context) {
     c.String(http.StatusOK, "Hello World!")
   })
 
+  router.GET("/tables", func(c *gin.Context){
+
+    lines := getAlltables()
+    var mesg []string
+    for _, line := range lines{
+      mesg = append(mesg, "/"+line)
+    }
+    //mesg  := []string{"1","2","3","4","5"}
+
+    c.HTML(http.StatusOK,"tables.tmpl", gin.H{
+      "mesg" : mesg,
+    })
+  })
+
   router.POST("/query", func(c *gin.Context){
     var jsondata JsonData
-   c.BindJSON(&jsondata)
+    c.BindJSON(&jsondata)
 
-   results := queryJason(jsondata.Sql)
+    results := queryJason(jsondata.Sql)
+
 
     //print with string way, Json way will get "/"
-   c.String(http.StatusOK, string(results))
-   //c.JSON(http.StatusOK,gin.H{"message": string(a)})
+    c.String(http.StatusOK, results)
+    //c.JSON(http.StatusOK, results)
  })
 
   router.Run(":8080")
