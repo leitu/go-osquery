@@ -1,8 +1,18 @@
 <html>
+<head>
+<style>
+body {background-color:black}
+p {color:white;
+font-family:courier;
+line-height:5px;
+}
+</style>
+</head>
 <body>
+  <p> Available tables that this server has: </p>
 
-  {{range .mesg }}
-  {{.}}<p>
-  {{end}}
+  {{range .mesg -}}
+  <a href=../tables{{.}}><p>{{.}}</p></a>
+  {{end -}}
 </body>
 </html>

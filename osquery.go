@@ -6,6 +6,23 @@ import (
   "bufio"
 )
 
+
+func query(sql string)string{
+
+  bs, err := exec.Command("osqueryi", sql, "--json").Output()
+
+  if err != nil {
+    panic(err)
+  }
+
+  return string(bs)
+}
+
+func getOnetable(table string)string{
+  sql := "select * from " + table
+  query(sql)
+}
+
 func getAlltables()[]string{
 
   cmd := exec.Command("osqueryi", ".table")

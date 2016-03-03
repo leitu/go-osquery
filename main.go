@@ -1,41 +1,26 @@
 package main
 
 import (
-  //"encoding/json"
-  //"fmt"
-  "os/exec"
   "github.com/gin-gonic/gin"
   "net/http"
-  //"regexp"
-  //"bytes"
-  //"time"
 )
 
-type JsonData struct {
+//add jsondata
+type JsonData struct{
   User string `json:"user" binding:"required"`
   Sql string `json:"sql" binding:"required"`
-
-}
-
-func queryJason(sql string)string{
-
-  bs, err := exec.Command("osqueryi", sql, "--json").Output()
-
-  if err != nil {
-    panic(err)
-  }
-
-  return string(bs)
 }
 
 func main(){
   router := gin.Default()
   router.LoadHTMLGlob("templates/*")
 
+  //Test with Hello
   router.GET("/", func(c *gin.Context) {
     c.String(http.StatusOK, "Hello World!")
   })
 
+  //Get the table listed, it has different table in different OS/Distrubition
   router.GET("/tables", func(c *gin.Context){
 
     lines := getAlltables()
@@ -43,12 +28,32 @@ func main(){
     for _, line := range lines{
       mesg = append(mesg, "/"+line)
     }
-    //mesg  := []string{"1","2","3","4","5"}
 
     c.HTML(http.StatusOK,"tables.tmpl", gin.H{
       "mesg" : mesg,
     })
   })
+
+  //Get the table listed in the tables page
+  router.GET("/tables/:table", func(c *gin.Context){
+    table := c.Param("table")
+
+    for _, line := range lines{
+      if line == table {
+        result := getOnetable(table)
+        c.String(http.StatusOK, result)
+      }
+    }
+
+  })
+
+  //Accept from POST, use it if you are familiar with sql
+  /*
+    {
+    "user" : "leitu"
+    "sql" : "select * from kernel_info"
+  }
+  */
 
   router.POST("/query", func(c *gin.Context){
     var jsondata JsonData
