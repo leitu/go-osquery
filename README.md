@@ -12,6 +12,16 @@ use go to executive osqueryi to get the data
 go run main.go
 ```
 
+```go
+go install
+goquery
+```
+
+###Page
+```bash
+http://localhost:8080/tables
+```
+
 ###Curl
 ```bash
 curl -i -H "Content-Type: application/json" -X POST \
@@ -41,5 +51,5 @@ You also can use command way to get the data directly
 ```
 
 ##ToDo
-* move SQL section to default value.
+* <del> SQL section to default value.
 * move query-kernel.go to cli way
