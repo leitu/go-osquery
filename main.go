@@ -37,7 +37,7 @@ func main(){
   //Get the table listed in the tables page
   router.GET("/tables/:table", func(c *gin.Context){
     table := c.Param("table")
-
+    lines := getAlltables()
     for _, line := range lines{
       if line == table {
         result := getOnetable(table)
