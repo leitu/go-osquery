@@ -5,8 +5,8 @@ import (
   "net/http"
 )
 
-//add jsondata
-type JsonData struct{
+  //add jsondata
+type JsonData struct {
   User string `json:"user" binding:"required"`
   Sql string `json:"sql" binding:"required"`
 }
@@ -37,7 +37,15 @@ func main(){
   //Get the table listed in the tables page
   router.GET("/tables/:table", func(c *gin.Context){
     table := c.Param("table")
-    c.String(http.StatusOK, result)
+    lines := getAlltables()
+    sql := "select * from " + table
+
+    if !stringInSlice(table, lines) {
+      c.JSON(500, gin.H { "error": "not exsiting",})
+    } else {
+      result := query(sql)
+      c.String(http.StatusOK, result)
+    }
   })
 
   //Accept from POST, use it if you are familiar with sql
@@ -52,7 +60,7 @@ func main(){
     var jsondata JsonData
     c.BindJSON(&jsondata)
 
-    results := queryJason(jsondata.Sql)
+    results := query(jsondata.Sql)
 
 
     //print with string way, Json way will get "/"
